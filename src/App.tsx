@@ -1,46 +1,28 @@
-import React from 'react';
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Navigator } from './components/navigators/Navigator';
 import './App.css'
-import { CounterMultiply } from './components/CounterMultiply';
-import { CounterSquare } from './components/CounterSquare';
-import { CounterUpdater } from './components/CounterUpdater';
-import { Login } from './components/Login';
-import { Logout } from './components/Logout';
-import {useSelector} from 'react-redux';
-import { Input } from './components/Input';
+
+import { layoutConfig } from './config/layout-config';
+import { Employees } from './components/pages/Employees';
+import { AddEmployee } from './components/pages/AddEmployee';
+import { AgeStatistics } from './components/pages/AgeStatistics';
+import { SalaryStatistics } from './components/pages/SalaryStatistics';
+
 
 function App() {
-  const userName: string = useSelector<any, string>(state => state.auth.userName);
-  const [operand, setOperand] = React.useState(2);
-  const [factor, setFactor] = React.useState(5);
-  const VAL: string = 'admin';
-    
-  // const [username, setUsername]= React.useState('');
-  return <div>
-    {userName && <div>
-      <p>{userName}</p>
-        <Input placeHolder={'Enter operand'} inputProcess={function (value: string):
-         string {
-        setOperand(+value);
-        return '';
-      } }></Input>
-        <Input placeHolder={'Enter factor'} inputProcess={function (value: string):
-         string {
-        setFactor(+value);
-        return '';
-      } }></Input>
-      </div>}
-      
-    {userName && <div>
-    <CounterUpdater operand={operand}></CounterUpdater>
-    <CounterSquare></CounterSquare>
-    <CounterMultiply factor={factor}></CounterMultiply>
- 
-  </div>}
-  {userName && <Logout></Logout>}
-  {!userName && <Login loginVal = {(userName:string): boolean =>userName.includes(VAL)}></Login>}
+  return <BrowserRouter>
+      <Routes>
+          <Route path='/' element={<Navigator className={layoutConfig.className}
+           routes={layoutConfig.routes}  />}>
+              <Route index element={<Employees/>}/>
+              <Route path='add' element={<AddEmployee/>}/>
+              <Route path='statistics/age' element={<AgeStatistics/>}/>
+              <Route path='statistics/salary' element={<SalaryStatistics/>}/>
+              
+          </Route>
+              
+      </Routes>
+  </BrowserRouter>
 
-  </div>
 }
 export default App;
-
